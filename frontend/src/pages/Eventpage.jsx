@@ -35,7 +35,7 @@
 // export default EventPage;
 
 // import { useEffect, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, json } from "react-router-dom";
 import EventsList from "../components/EventsList";
 
 
@@ -52,6 +52,11 @@ export const loader = async () => {
     //   { status: 500 }
     // );
     //  using json utility function instead
+
+    return json({ message: "Could not fetch the data" }, { status: 500 });
+
+
+
   } else {
     // const resData = await response.json();
     return response;

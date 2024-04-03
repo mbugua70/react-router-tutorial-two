@@ -1,17 +1,25 @@
-import { useParams } from "react-router-dom";
+import { json, useLoaderData } from "react-router-dom";
+import EventItem from "../components/EventItem";
+
+// loader function
+
+export const loader = async ({ params }) => {
+  const paramsID = params.singleID;
+  const response = await fetch(`http://localhost:8080/events/${paramsID}`);
+
+  if (!response.ok) {
+    throw json({ message: "Could not fetch the data" }, { status: 500 });
+  } else {
+    return response;
+  }
+};
 
 const EventDetailPage = () => {
-  const params = useParams();
+  const data = useLoaderData();
+  const event = data.event;
   return (
     <>
-      <h4>Event Details page</h4>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis
-        voluptatum, culpa quam, tempore numquam exercitationem laborum
-        repellendus quisquam, perferendis distinctio saepe sit corrupti
-        dignissimos dolorem quas quos autem! Harum, placeat.
-      </p>
-      <p>{params.singleID}</p>
+      <EventItem event={event} />
     </>
   );
 };

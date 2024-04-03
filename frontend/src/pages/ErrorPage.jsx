@@ -9,7 +9,9 @@ const ErrorPage = () => {
   let message = "Something went wrong";
 
   if (error.status === 500) {
-    message = JSON.parse(error.data).message;
+    // message = JSON.parse(error.data).message;
+    // because of the use of json from react-router-dom we won't have to use JSON.parse
+    message = error.data.message;
   }
 
   if (error.status === 404) {
