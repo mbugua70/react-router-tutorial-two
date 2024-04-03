@@ -41,16 +41,22 @@ import EventsList from "../components/EventsList";
 
 // loader function
 
-export const loader = async ()  => {
-   //  the user of loader
-   const response = await fetch("http://localhost:8080/events");
+export const loader = async () => {
+  //  the user of loader
+  const response = await fetch("http://localhost:8080/events");
 
-   if (!response.ok) {
-   } else {
-     const resData = await response.json();
-     return resData.events;
-   }
-}
+  if (!response.ok) {
+    // return { isError: true, message: "Could not fetch events" };
+    // throw new Response(
+    //   JSON.stringify({ message: "Could not fetch the data" }),
+    //   { status: 500 }
+    // );
+    //  using json utility function instead
+  } else {
+    // const resData = await response.json();
+    return response;
+  }
+};
 
 function EventsPage() {
   // const [isLoading, setIsLoading] = useState(false);
@@ -73,7 +79,12 @@ function EventsPage() {
   //   the use of loader
   // }, []);
 
-  const events = useLoaderData();
+  const data = useLoaderData();
+  const events = data.events;
+
+  // if (data.isError) {
+  //   return <p>{data.message}</p>;
+  // }
 
   return (
     <>
