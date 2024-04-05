@@ -35,13 +35,11 @@
 // export default EventPage;
 
 // import { useEffect, useState } from "react";
-import { useLoaderData, json } from "react-router-dom";
+import { useLoaderData, json, defer, Await } from "react-router-dom";
 import EventsList from "../components/EventsList";
+import { Suspense } from "react";
 
-
-// loader function
-
-export const loader = async () => {
+export const loaderEvent = async () => {
   //  the user of loader
   const response = await fetch("http://localhost:8080/events");
 
@@ -54,13 +52,19 @@ export const loader = async () => {
     //  using json utility function instead
 
     return json({ message: "Could not fetch the data" }, { status: 500 });
-
-
-
   } else {
     // const resData = await response.json();
-    return response;
+    const loadData = await response.json();
+    return loadData.events;
   }
+};
+
+// loader function
+
+export const loader = () => {
+  return defer({
+    events: loaderEvent(),
+  });
 };
 
 function EventsPage() {
@@ -84,8 +88,10 @@ function EventsPage() {
   //   the use of loader
   // }, []);
 
-  const data = useLoaderData();
-  const events = data.events;
+  // const data = useLoaderData();
+  // const events = data.events;
+
+  const { events } = useLoaderData();
 
   // if (data.isError) {
   //   return <p>{data.message}</p>;
@@ -98,7 +104,11 @@ function EventsPage() {
         {error && <p>{error}</p>}
       </div>
       {!isLoading && fetchedEvents && <EventsList events={fetchedEvents} />} */}
-      <EventsList events={events} />
+      <Suspense fallback={<p style={{ textAlign: "center" }}>Loading....</p>}>
+        <Await resolve={events}>
+          {(loadedEvent) => <EventsList events={loadedEvent} />}
+        </Await>
+      </Suspense>
     </>
   );
 }
