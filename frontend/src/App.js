@@ -60,11 +60,19 @@ const router = createBrowserRouter([
           },
           {
             path: ":singleID",
-            element: <EventDetailPage />,
+            // the use of useRouterLoaderData
+            id: "event-details",
             loader: eventDetailLoader,
+            children: [
+              {
+                index: true,
+                element: <EventDetailPage />,
+              },
+              { path: "edit", element: <EditEventPage /> },
+            ],
           },
+
           { path: "new", element: <NewEventPage /> },
-          { path: ":singleID/edit", element: <EditEventPage /> },
         ],
       },
     ],
