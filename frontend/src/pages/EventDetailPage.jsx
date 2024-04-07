@@ -1,12 +1,17 @@
 import { json, useRouteLoaderData, redirect } from "react-router-dom";
 import EventItem from "../components/EventItem";
+import { getToken } from "../util/gettoken";
 
 // loader function
 
 export const action = async ({ request, params }) => {
   const paramsID = params.singleID;
+  const token = getToken();
   const response = await fetch(`http://localhost:8080/events/${paramsID}`, {
     method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
   });
 
   if (!response.ok) {

@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import classes from "./EventForm.module.css";
+import { getToken } from "../util/gettoken";
 
 // action method for submitting form activities
 
@@ -15,6 +16,7 @@ export const action = async ({ request, params }) => {
   const data = await request.formData();
   const paramsID = params.singleID;
   const method = request.method;
+  const token = getToken();
 
   const eventData = {
     title: data.get("title"),
@@ -33,6 +35,7 @@ export const action = async ({ request, params }) => {
     method: method,
     headers: {
       "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
     },
     body: JSON.stringify(eventData),
   });

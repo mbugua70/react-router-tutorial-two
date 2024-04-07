@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post("/signup", async (req, res, next) => {
   const data = req.body;
+  console.log(data.email);
   let errors = {};
 
   if (!isValidEmail(data.email)) {
